@@ -47,8 +47,7 @@ function Embedify(options) {
 Embedify.prototype.get = function get(urls) {
   const concurrency = this.concurrency;
 
-  return Promise.map(this.ensureUrls(urls), url => this.tryResolve(url), { concurrency })
-    .then(results => results.filter(r => is.existy(r)));
+  return Promise.map(this.ensureUrls(urls), url => this.tryResolve(url), { concurrency });
 };
 
 /**
