@@ -69,6 +69,7 @@ Embedify.prototype.tryResolve = function tryResolve(url) {
             match = {
               url: provider.transform(reMatch),
               apiUrl: provider.apiUrl,
+              provider,
             };
           }
           return is.existy(match);
@@ -76,7 +77,7 @@ Embedify.prototype.tryResolve = function tryResolve(url) {
         return is.existy(match);
       });
 
-      return match ? this.fetch(match.apiUrl, match.url) : null;
+      return match ? this.fetch(match.apiUrl, match.url, match.provider.opts) : null;
     });
 };
 
@@ -106,11 +107,11 @@ Embedify.prototype.ensureUrls = function ensureUrls(urls) {
  * @param {String} matchUrl
  * @returns {Promise}
  */
-Embedify.prototype.fetch = function fetch(apiUrl, matchUrl) {
+Embedify.prototype.fetch = function fetch(apiUrl, matchUrl, extraOpts) {
   return Promise.resolve()
     .then(() => {
       const options = {
-        params: { url: matchUrl },
+        params: Object.assign({ url: matchUrl }, extraOpts || {}),
         headers: { 'User-Agent': 'Embedify' },
         json: true,
       };
